@@ -1,0 +1,225 @@
+--CREACIÓN
+CREATE TABLE Entrenador (
+  id_entrenador INT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  nacionalidad VARCHAR(100)
+);
+
+CREATE TABLE Estadio (
+  id_estadio INT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Arbitro (
+  id_arbitro INT PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Equipo (
+  id_equipo INT PRIMARY KEY,
+  nombre_oficial VARCHAR(255) NOT NULL,
+  id_entrenador INT NOT NULL UNIQUE, 
+    FOREIGN KEY (id_entrenador)
+    REFERENCES Entrenador(id_entrenador)
+);
+
+CREATE TABLE Jugador (
+  id_jugador INT PRIMARY KEY,
+  nombre_completo VARCHAR(255) NOT NULL,
+  posicion VARCHAR(100),
+  nacionalidad VARCHAR(100),
+  dorsal INT,
+  id_equipo INT NOT NULL, 
+    FOREIGN KEY (id_equipo)
+    REFERENCES Equipo(id_equipo)
+);
+
+CREATE TABLE Partido (
+  id_partido INT PRIMARY KEY,
+  fecha_hora DATETIME NOT NULL,
+  id_equipo_local INT NOT NULL,
+  id_equipo_visitante INT NOT NULL,
+  id_estadio INT NOT NULL,
+  id_arbitro INT NOT NULL,
+    FOREIGN KEY (id_equipo_local) REFERENCES Equipo(id_equipo),
+    FOREIGN KEY (id_equipo_visitante) REFERENCES Equipo(id_equipo),
+    FOREIGN KEY (id_estadio) REFERENCES Estadio(id_estadio),
+    FOREIGN KEY (id_arbitro) REFERENCES Arbitro(id_arbitro)
+);
+
+CREATE TABLE Goles (
+  id_gol INT PRIMARY KEY AUTO_INCREMENT,
+  id_jugador INT NOT NULL,
+  id_partido INT NOT NULL,
+  minuto INT, 
+    FOREIGN KEY (id_jugador) REFERENCES Jugador(id_jugador),
+    FOREIGN KEY (id_partido) REFERENCES Partido(id_partido)
+);
+
+CREATE TABLE Tarjetas (
+  id_tarjeta INT PRIMARY KEY AUTO_INCREMENT, 
+  id_jugador INT NOT NULL,
+  id_partido INT NOT NULL,
+  tipo VARCHAR(50) NOT NULL, 
+    FOREIGN KEY (id_jugador) REFERENCES Jugador(id_jugador),
+    FOREIGN KEY (id_partido) REFERENCES Partido(id_partido)
+);
+
+-- ---
+-- Insercion de datos
+-- ---
+
+INSERCIÓN DE DATOS
+INSERT INTO Entrenador (id_entrenador, nombre, nacionalidad) VALUES
+(101, 'Pep Guardiola', 'Española'),
+(102, 'Carlo Ancelotti', 'Italiana'),
+(103, 'Jürgen Klopp', 'Alemana'),
+(104, 'Mikel Arteta', 'Española'),
+(105, 'Xabi Alonso', 'Española'),
+(106, 'Diego Simeone', 'Argentina'),
+(107, 'Luis Enrique', 'Española'),
+(108, 'Zinedine Zidane', 'Francesa'),
+(109, 'Julian Nagelsmann', 'Alemana'),
+(110, 'Thomas Tuchel', 'Alemana'),
+(111, 'Antonio Conte', 'Italiana'),
+(112, 'Massimiliano Allegri', 'Italiana'),
+(113, 'Unai Emery', 'Española'),
+(114, 'Tite', 'Brasileña'),
+(115, 'Hansi Flick', 'Alemana');
+
+INSERT INTO Estadio (id_estadio, nombre) VALUES
+(201, 'Santiago Bernabéu'),
+(202, 'Camp Nou'),
+(203, 'Wembley Stadium'),
+(204, 'Maracanã'),
+(205, 'Anfield'),
+(206, 'Old Trafford'),
+(207, 'Allianz Arena'),
+(208, 'San Siro (Giuseppe Meazza)'),
+(209, 'La Bombonera'),
+(210, 'Estadio Monumental (River)'),
+(211, 'Signal Iduna Park'),
+(212, 'Parc des Princes'),
+(213, 'Etihad Stadium'),
+(214, 'Estadio Azteca'),
+(215, 'Estádio da Luz');
+
+INSERT INTO Arbitro (id_arbitro, nombre) VALUES
+(301, 'Szymon Marciniak'),
+(302, 'Daniele Orsato'),
+(303, 'Anthony Taylor'),
+(304, 'Clément Turpin'),
+(305, 'Michael Oliver'),
+(306, 'Néstor Pitana'),
+(307, 'Wilton Sampaio'),
+(308, 'Jesús Gil Manzano'),
+(309, 'Danny Makkelie'),
+(310, 'Slavko Vinčić'),
+(311, 'István Kovács'),
+(312, 'Cüneyt Çakır'),
+(313, 'Félix Brych'),
+(314, 'Björn Kuipers'),
+(315, 'Pierluigi Collina');
+
+INSERT INTO Equipo (id_equipo, nombre_oficial, id_entrenador) VALUES
+(401, 'Manchester City', 101),
+(402, 'Real Madrid', 102),
+(403, 'Liverpool', 103),
+(404, 'Arsenal', 104),
+(405, 'Bayer Leverkusen', 105),
+(406, 'Atlético de Madrid', 106),
+(407, 'Paris Saint-Germain', 107),
+(408, 'Olympique Marseille', 108),
+(409, 'Bayern Múnich', 109),
+(410, 'Borussia Dortmund', 110),
+(411, 'Inter de Milán', 111),
+(412, 'Juventus', 112),
+(413, 'Aston Villa', 113),
+(414, 'Flamengo', 114),
+(415, 'FC Barcelona', 115);
+
+INSERT INTO Jugador (id_jugador, nombre_completo, posicion, nacionalidad, dorsal, id_equipo) VALUES
+(501, 'Erling Haaland', 'Delantero', 'Noruega', 9, 401),
+(502, 'Jude Bellingham', 'Mediocampista', 'Inglaterra', 5, 402),
+(503, 'Mohamed Salah', 'Delantero', 'Egipto', 11, 403),
+(504, 'Bukayo Saka', 'Delantero', 'Inglaterra', 7, 404),
+(505, 'Florian Wirtz', 'Mediocampista', 'Alemania', 10, 405),
+(506, 'Antoine Griezmann', 'Delantero', 'Francia', 7, 406),
+(507, 'Kylian Mbappé', 'Delantero', 'Francia', 10, 407),
+(508, 'P.E. Aubameyang', 'Delantero', 'Gabón', 10, 408),
+(509, 'Harry Kane', 'Delantero', 'Inglaterra', 9, 409),
+(510, 'Marco Reus', 'Mediocampista', 'Alemania', 11, 410),
+(511, 'Lautaro Martínez', 'Delantero', 'Argentina', 10, 411),
+(512, 'Dušan Vlahović', 'Delantero', 'Serbia', 9, 412),
+(513, 'Ollie Watkins', 'Delantero', 'Inglaterra', 11, 413),
+(514, 'Giorgian De Arrascaeta', 'Mediocampista', 'Uruguay', 14, 414),
+(515, 'Lamine Yamal', 'Delantero', 'España', 27, 415);
+
+INSERT INTO Partido (id_partido, fecha_hora, id_equipo_local, id_equipo_visitante, id_estadio, id_arbitro) VALUES
+(601, '2025-12-01 20:00:00', 401, 402, 213, 301), -- Man City vs Real Madrid
+(602, '2025-12-01 20:00:00', 403, 404, 205, 302), -- Liverpool vs Arsenal
+(603, '2025-12-02 18:00:00', 405, 406, 207, 303), -- Leverkusen vs Atlético
+(604, '2025-12-02 18:00:00', 407, 408, 212, 304), -- PSG vs Marseille
+(605, '2025-12-03 21:00:00', 409, 410, 207, 305), -- Bayern vs Dortmund
+(606, '2025-12-03 21:00:00', 411, 412, 208, 306), -- Inter vs Juventus
+(607, '2025-12-04 15:00:00', 413, 414, 203, 307), -- Aston Villa vs Flamengo
+(608, '2025-12-04 15:00:00', 415, 401, 202, 308), -- Barcelona vs Man City
+(609, '2025-12-05 17:00:00', 402, 403, 201, 309), -- Real Madrid vs Liverpool
+(610, '2025-12-05 17:00:00', 404, 405, 206, 310), -- Arsenal vs Leverkusen
+(611, '2025-12-06 19:00:00', 406, 407, 210, 311), -- Atlético vs PSG
+(612, '2025-12-06 19:00:00', 408, 409, 209, 312), -- Marseille vs Bayern
+(613, '2025-12-07 20:00:00', 410, 411, 211, 313), -- Dortmund vs Inter
+(614, '2025-12-07 20:00:00', 412, 413, 208, 314), -- Juventus vs Aston Villa
+(615, '2025-12-08 21:00:00', 414, 415, 204, 315); -- Flamengo vs Barcelona
+
+INSERT INTO Goles (id_gol, id_jugador, id_partido, minuto) VALUES
+(NULL, 501, 601, 22), -- Gol de Haaland (Man City) en Partido 601
+(NULL, 502, 601, 45), -- Gol de Bellingham (Real Madrid) en Partido 601
+(NULL, 503, 602, 15), -- Gol de Salah (Liverpool) en Partido 602
+(NULL, 504, 602, 78), -- Gol de Saka (Arsenal) en Partido 602
+(NULL, 505, 603, 91), -- Gol de Wirtz (Leverkusen) en Partido 603
+(NULL, 507, 604, 8),  -- Gol de Mbappé (PSG) en Partido 604
+(NULL, 509, 605, 33), -- Gol de Kane (Bayern) en Partido 605
+(NULL, 510, 605, 50), -- Gol de Reus (Dortmund) en Partido 605
+(NULL, 511, 606, 68), -- Gol de Lautaro (Inter) en Partido 606
+(NULL, 513, 607, 72), -- Gol de Watkins (Aston Villa) en Partido 607
+(NULL, 515, 608, 19), -- Gol de Yamal (Barcelona) en Partido 608
+(NULL, 501, 608, 85), -- Gol de Haaland (Man City) en Partido 608
+(NULL, 502, 609, 9),  -- Gol de Bellingham (Real Madrid) en Partido 609
+(NULL, 502, 609, 92), -- Otro gol de Bellingham
+(NULL, 514, 615, 44); -- Gol de De Arrascaeta (Flamengo) en Partido 615
+
+INSERT INTO Tarjetas (id_tarjeta, id_jugador, id_partido, tipo) VALUES
+(NULL, 501, 601, 'Amarilla'), -- Tarjeta a Haaland en Partido 601
+(NULL, 502, 601, 'Amarilla'), -- Tarjeta a Bellingham en Partido 601
+(NULL, 504, 602, 'Roja'),     -- Tarjeta Roja a Saka en Partido 602
+(NULL, 506, 603, 'Amarilla'), -- Tarjeta a Griezmann en Partido 603
+(NULL, 508, 604, 'Amarilla'), -- Tarjeta a Aubameyang en Partido 604
+(NULL, 509, 605, 'Amarilla'), -- Tarjeta a Kane en Partido 605
+(NULL, 512, 606, 'Amarilla'), -- Tarjeta a Vlahović en Partido 606
+(NULL, 511, 606, 'Amarilla'), -- Tarjeta a Lautaro en Partido 606
+(NULL, 513, 607, 'Amarilla'), -- Tarjeta a Watkins en Partido 607
+(NULL, 515, 608, 'Amarilla'), -- Tarjeta a Yamal en Partido 608
+(NULL, 503, 609, 'Roja'),     -- Tarjeta Roja a Salah en Partido 609
+(NULL, 505, 610, 'Amarilla'), -- Tarjeta a Wirtz en Partido 610
+(NULL, 507, 611, 'Amarilla'), -- Tarjeta a Mbappé en Partido 611
+(NULL, 510, 613, 'Amarilla'), -- Tarjeta a Reus en Partido 613
+(NULL, 514, 615, 'Amarilla'); -- Tarjeta a De Arrascaeta en Partido 615
+
+-- CONSULTAS
+
+-- El Nombre, dorsal y nacionalidad de todos los jugadores con tarjeta amarilla
+--SELECT nombre_completo, dorsal, nacionalidad, tipo FROM Tarjetas t JOIN Jugador j ON tipo = 'Amarilla' WHERE j.id_jugador = t.id_jugador;
+
+
+-- Jugadores con nacionalidad Noruega, que sea delantero, y pertenezca al Manchester City
+--SELECT nombre_completo, posicion,nombre_oficial, nacionalidad FROM Jugador j JOIN Equipo e ON j.id_equipo = e.id_equipo WHERE posicion = 'Delantero' AND nombre_oficial = 'Manchester City' AND nacionalidad = 'Noruega';
+
+-- Todos los árbitros que han arbitrado al Equipo Inter de Milán
+--SELECT a.nombre FROM arbitro a JOIN partido p ON a.id_arbitro = p.id_arbitro JOIN equipo e ON e.id_equipo = p.id_equipo_local OR e.id_equipo = p.id_equipo_visitante WHERE e.nombre_oficial = 'Inter de Milán';
+
+-- Nombre del Estadio donde se jugó el partido ManCity vs RealMadrid
+-- SELECT nombre FROM estadio WHERE id_estadio IN ( SELECT p.id_estadio FROM partido p WHERE p.id_equipo_local = ( SELECT id_equipo FROM equipo WHERE nombre_oficial = 'Manchester City' ) AND p.id_equipo_visitante = (SELECT id_equipo FROM equipo WHERE nombre_oficial = 'Real Madrid'));
+
+-- Nombre de los entrenadores con nacionalidad alemana que dirigen al FC Barcelona
+-- SELECT nombre, nacionalidad FROM entrenador en JOIN Equipo e ON en.id_entrenador = e.id_entrenador WHERE nacionalidad = 'Alemana' AND nombre_oficial = 'FC Barcelona';
